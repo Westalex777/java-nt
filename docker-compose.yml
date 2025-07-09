@@ -55,6 +55,21 @@ services:
           cpus: '1'
           memory: 512M
 
+  kotlin:
+    build:
+      context: ./app-nt-kotlin
+    ports:
+      - "8084:8084"
+    depends_on:
+      - mock
+    networks:
+      - nt-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+
 networks:
   nt-network:
     driver: bridge

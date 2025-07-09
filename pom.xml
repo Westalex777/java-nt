@@ -22,6 +22,7 @@
 		<module>app-nt-platform-thread</module>
 		<module>app-nt-virtual-thread</module>
 		<module>app-nt-webflux</module>
+		<module>app-nt-kotlin</module>
 	</modules>
 
 	<properties>
