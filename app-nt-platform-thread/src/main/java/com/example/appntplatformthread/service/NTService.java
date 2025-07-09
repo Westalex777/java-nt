@@ -19,18 +19,15 @@ public class NTService {
 
     public CompletableFuture<String> test() {
         CompletableFuture<String> request1 = CompletableFuture.supplyAsync(() ->
-                        restTemplate.getForObject(url, String.class),
-                Executors.newThreadPerTaskExecutor(Thread.ofVirtual().factory())
+                        restTemplate.getForObject(url, String.class)
         );
 
         CompletableFuture<String> request2 = CompletableFuture.supplyAsync(() ->
-                        restTemplate.getForObject(url, String.class),
-                Executors.newThreadPerTaskExecutor(Thread.ofVirtual().factory())
+                        restTemplate.getForObject(url, String.class)
         );
 
         CompletableFuture<String> request3 = CompletableFuture.supplyAsync(() ->
-                        restTemplate.getForObject(url, String.class),
-                Executors.newThreadPerTaskExecutor(Thread.ofVirtual().factory())
+                        restTemplate.getForObject(url, String.class)
         );
 
         return CompletableFuture.allOf(request1, request2, request3)
