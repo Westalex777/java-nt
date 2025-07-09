@@ -12,3 +12,16 @@ spring:
 integration:
   mock:
     url: http://mock:8080/mock
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "prometheus"
+  endpoint:
+    prometheus:
+      access: read_only
+  prometheus:
+    metrics:
+      export:
+        enabled: true

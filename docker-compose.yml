@@ -55,20 +55,38 @@ services:
           cpus: '1'
           memory: 512M
 
-  kotlin:
-    build:
-      context: ./app-nt-kotlin
+#  kotlin:
+#    build:
+#      context: ./app-nt-kotlin
+#    ports:
+#      - "8084:8084"
+#    depends_on:
+#      - mock
+#    networks:
+#      - nt-network
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '1'
+#          memory: 512M
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
-      - "8084:8084"
-    depends_on:
-      - mock
+      - "9090:9090"
     networks:
       - nt-network
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 512M
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - nt-network
+    depends_on:
+      - prometheus
 
 networks:
   nt-network:
