@@ -1,0 +1,11 @@
+
+server:
+  port: 8081
+
+spring:
+  application:
+    name: app-nt-platform-thread
+
+integration:
+  mock:
+    url: http://mock:8080/mock

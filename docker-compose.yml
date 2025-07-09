@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+
+  mock:
+    build:
+      context: ./app-nt-mock
+    ports:
+      - "8080:8080"
+    networks:
+      - nt-network
+
+  platform-thread:
+    build:
+      context: ./app-nt-platform-thread
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mock
+    networks:
+      - nt-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+
+  virtual-thread:
+    build:
+      context: ./app-nt-virtual-thread
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mock
+    networks:
+      - nt-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+
+  webflux:
+    build:
+      context: ./app-nt-webflux
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mock
+    networks:
+      - nt-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+
+networks:
+  nt-network:
+    driver: bridge

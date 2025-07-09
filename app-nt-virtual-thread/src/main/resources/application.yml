@@ -1,0 +1,14 @@
+
+server:
+  port: 8082
+
+spring:
+  application:
+    name: app-nt-virtual-thread
+  threads:
+    virtual:
+      enabled: true
+
+integration:
+  mock:
+    url: http://mock:8080/mock
