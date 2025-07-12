@@ -11,7 +11,7 @@ spring:
 
 integration:
   mock:
-    url: http://mock:8080/mock
+    url: http://mock:8080
 
 management:
   endpoints:

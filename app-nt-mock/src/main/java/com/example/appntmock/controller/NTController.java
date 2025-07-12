@@ -3,11 +3,12 @@ package com.example.appntmock.controller;
 import com.example.appntmock.service.NTService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDateTime;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Slf4j
 @RestController
@@ -18,14 +19,19 @@ public class NTController {
     private final NTService service;
 
     @GetMapping("/mock")
-    public String test() {
+    public String test(@RequestParam(name = "latency", defaultValue = "1000", required = false) int latency) {
         log.info("Request /mock");
-        int i = service.test();
-        return LocalDateTime.now() + " -> " + i;
+        return service.test(latency);
     }
 
-    @GetMapping("/get")
-    public int getCount() {
-        return service.getCount();
+    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter stream(
+            @RequestParam(name = "length", defaultValue = "100", required = false) int length,
+            @RequestParam(name = "latency", defaultValue = "100", required = false) int latency,
+            @RequestParam(name = "timeout", defaultValue = "10000", required = false) long timeout
+    ) {
+        log.info("Request /stream");
+        return service.stream(length, latency, timeout);
     }
+
 }
