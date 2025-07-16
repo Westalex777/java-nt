@@ -15,19 +15,6 @@ services:
           cpus: '2'
           memory: 2048M
 
-  loader:
-    build:
-      context: ./app-nt-loader
-    ports:
-      - "8085:8085"
-    networks:
-      - nt-network
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 2048M
-
   platform-thread:
     build:
       context: ./app-nt-platform-thread
@@ -72,21 +59,6 @@ services:
         limits:
           cpus: '1'
           memory: 512M
-
-#  kotlin:
-#    build:
-#      context: ./app-nt-kotlin
-#    ports:
-#      - "8084:8084"
-#    depends_on:
-#      - mock
-#    networks:
-#      - nt-network
-#    deploy:
-#      resources:
-#        limits:
-#          cpus: '1'
-#          memory: 512M
 
   prometheus:
     image: prom/prometheus
