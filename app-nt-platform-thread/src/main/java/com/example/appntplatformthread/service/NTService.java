@@ -1,46 +1,48 @@
 package com.example.appntplatformthread.service;
 
 import com.example.appntplatformthread.client.SseHttpClient;
+import com.example.appntplatformthread.client.http.HttpClientDispatcher;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.Random;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class NTService {
 
-    private final String url;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final HttpClientDispatcher httpClientDispatcher;
     private final SseHttpClient sseHttpClient;
+    private static final String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private final Random random = new Random();
 
-    public NTService(@Value("${integration.mock.url}") String url, SseHttpClient sseHttpClient) {
-        this.url = url + "/mock";
-        this.sseHttpClient = sseHttpClient;
+    public String test(String httpClientName) {
+        var httpClient = httpClientDispatcher.apply(httpClientName);
+        return httpClient.mockIntegration();
     }
 
-    public CompletableFuture<String> test() {
-        CompletableFuture<String> request1 = mockIntegration();
-        CompletableFuture<String> request2 = mockIntegration();
-        CompletableFuture<String> request3 = mockIntegration();
-
-        return CompletableFuture.allOf(request1, request2, request3)
-                .thenApply(v -> {
-                    String r1 = request1.join();
-                    String r2 = request2.join();
-                    String r3 = request3.join();
-                    return "Results:\n" + r1 + "\n" + r2 + "\n" + r3;
-                });
+    public String test(int latency) {
+        try {
+            Thread.sleep(latency);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return textGenerator(100);
     }
 
     public String stream(Integer length, Integer latency, Long timeout) {
         return sseHttpClient.readSseStream(length, latency, timeout);
     }
 
-    private CompletableFuture<String> mockIntegration() {
-        return CompletableFuture.supplyAsync(() -> restTemplate.getForObject(url, String.class));
+    private String textGenerator(int length) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(chars.length());
+            sb.append(chars.charAt(index));
+        }
+        return sb.toString();
     }
 
 }
