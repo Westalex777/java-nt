@@ -9,6 +9,24 @@ services:
       - "8080:8080"
     networks:
       - nt-network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2048M
+
+  loader:
+    build:
+      context: ./app-nt-loader
+    ports:
+      - "8085:8085"
+    networks:
+      - nt-network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2048M
 
   platform-thread:
     build:

@@ -33,7 +33,7 @@ public class SseHttpClient {
             connection.setRequestProperty("Accept", "text/event-stream");
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
                 String line;
-                while ((line = reader.readLine()) != null) {
+                while ((line = reader.readLine()) != null && !line.equals("data:[DONE]")) {
                     if (line.startsWith("data:")) {
                         result.append(line.substring(5).trim());
                     }

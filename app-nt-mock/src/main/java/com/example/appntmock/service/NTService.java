@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.time.LocalDateTime;
 import java.util.Random;
 
 @Slf4j
@@ -27,16 +26,14 @@ public class NTService {
         SseEmitter sseEmitter = new SseEmitter(timeout);
         Thread.startVirtualThread(() -> {
             try {
-                int count = 1;
                 for (char c : textGenerator(length).toCharArray()) {
                     SseEmitter.SseEventBuilder event = SseEmitter.event()
-                            .data(LocalDateTime.now().toString())
-                            .id(String.valueOf(c))
-                            .name(count + " of " + length);
+                            .data(String.valueOf(c));
                     sseEmitter.send(event);
-                    count++;
                     sleep(latency);
                 }
+                SseEmitter.SseEventBuilder event = SseEmitter.event().data("[DONE]");
+                sseEmitter.send(event);
                 sseEmitter.complete();
             } catch (Exception e) {
                 sseEmitter.completeWithError(e);

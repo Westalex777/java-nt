@@ -1,0 +1,27 @@
+
+server:
+  port: 8085
+
+spring:
+  application:
+    name: app-nt-loader
+  threads:
+    virtual:
+      enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "prometheus"
+  endpoint:
+    prometheus:
+      access: read_only
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+apps:
+  nt-virtual-thread:
+    url: http://virtual-thread:8080
