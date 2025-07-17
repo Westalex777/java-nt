@@ -16,7 +16,7 @@ public class NTController {
     private final NTService service;
 
     @GetMapping("/test")
-    public String test(@RequestParam(name = "httpClient", required = false, defaultValue = "restTemplateClient") String httpClient) {
+    public String test(@RequestParam(name = "httpClient", required = false, defaultValue = "httpClientImpl") String httpClient) {
         log.info("Request /test");
         return service.test(httpClient);
     }
