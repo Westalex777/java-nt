@@ -1,0 +1,18 @@
+#version: '3.8'
+#
+#services:
+#  ktor-proxy:
+#    build: .
+#    ports:
+#      - "8085:8085"
+#    networks:
+#      - nt-network
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '1'
+#          memory: 512M
+#
+#networks:
+#  nt-network:
+#    driver: bridge

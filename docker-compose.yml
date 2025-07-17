@@ -60,6 +60,18 @@ services:
           cpus: '1'
           memory: 512M
 
+  ktor-proxy:
+    build: ./ktor-proxy-server
+    ports:
+      - "8085:8085"
+    networks:
+      - nt-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+
   prometheus:
     image: prom/prometheus
     volumes:
