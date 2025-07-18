@@ -23,7 +23,7 @@ public class NTController {
     }
 
     @GetMapping("/stream")
-    public Flux<String> stream( @RequestParam(name = "latency", required = false, defaultValue = "0") Integer latency) {
+    public Flux<String> stream(@RequestParam(name = "latency", required = false, defaultValue = "0") Integer latency) {
         log.info("Request /stream");
         return service.stream(latency);
     }
