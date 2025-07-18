@@ -12,7 +12,7 @@
 
 	<artifactId>app-nt-mock</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>app-nt-mock</name>
+	<name>mock</name>
 	<description>app-nt-mock</description>
 	<packaging>jar</packaging>
 
@@ -20,6 +20,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -37,6 +41,57 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+			<!-- Отключаем стандартный deploy плагин -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>default-deploy</id>
+						<phase>none</phase>  <!-- Отключаем стандартный deploy -->
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Запускаем docker-compose при фазе deploy -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>docker-compose-build</id>
+						<phase>install</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>cmd</executable>
+							<arguments>
+								<argument>/c</argument>
+								<argument>docker-compose build --no-cache ${project.name}</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>docker-compose-up</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>cmd</executable>
+							<arguments>
+								<argument>/c</argument>
+								<argument>docker-compose up -d --force-recreate ${project.name}</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 

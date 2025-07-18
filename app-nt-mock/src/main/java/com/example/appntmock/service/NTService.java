@@ -3,7 +3,11 @@ package com.example.appntmock.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import reactor.core.publisher.Flux;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Slf4j
@@ -30,6 +34,7 @@ public class NTService {
                     SseEmitter.SseEventBuilder event = SseEmitter.event()
                             .data(String.valueOf(c));
                     sseEmitter.send(event);
+                    log.info(String.valueOf(c));
                     sleep(latency);
                 }
                 SseEmitter.SseEventBuilder event = SseEmitter.event().data("[DONE]");
@@ -40,6 +45,17 @@ public class NTService {
             }
         });
         return sseEmitter;
+    }
+
+    public Flux<String> stream2(int length, int latency, long timeout) {
+        List<String> text = new ArrayList<>();
+        for (char c : textGenerator(length).toCharArray()) {
+            text.add(String.valueOf(c));
+        }
+        return Flux.fromIterable(text)
+                .doOnNext(log::info)
+                .delayElements(Duration.ofMillis(latency))
+                .take(Duration.ofSeconds(1));
     }
 
     private String textGenerator(int length) {

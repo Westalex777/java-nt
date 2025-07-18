@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import reactor.core.publisher.Flux;
 
 @Slf4j
 @RestController
@@ -32,6 +33,16 @@ public class NTController {
     ) {
         log.info("Request /stream");
         return service.stream(length, latency, timeout);
+    }
+
+    @GetMapping(value = "/stream2", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> stream2(
+            @RequestParam(name = "length", defaultValue = "100", required = false) int length,
+            @RequestParam(name = "latency", defaultValue = "100", required = false) int latency,
+            @RequestParam(name = "timeout", defaultValue = "10000", required = false) long timeout
+    ) {
+        log.info("Request /stream2");
+        return service.stream2(length, latency, timeout);
     }
 
 }
