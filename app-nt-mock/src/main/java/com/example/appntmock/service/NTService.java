@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import reactor.core.publisher.Flux;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,14 +32,10 @@ public class NTService {
         Thread.startVirtualThread(() -> {
             try {
                 for (char c : textGenerator(length).toCharArray()) {
-                    SseEmitter.SseEventBuilder event = SseEmitter.event()
-                            .data(String.valueOf(c));
-                    sseEmitter.send(event);
-                    log.info(String.valueOf(c));
+                    sendToSSE(sseEmitter, c);
                     sleep(latency);
                 }
-                SseEmitter.SseEventBuilder event = SseEmitter.event().data("[DONE]");
-                sseEmitter.send(event);
+                sendToSSE(sseEmitter, "[DONE]");
                 sseEmitter.complete();
             } catch (Exception e) {
                 sseEmitter.completeWithError(e);
@@ -47,7 +44,7 @@ public class NTService {
         return sseEmitter;
     }
 
-    public Flux<String> stream2(int length, int latency, long timeout) {
+    public Flux<String> stream2(int length, int latency) {
         List<String> text = new ArrayList<>();
         for (char c : textGenerator(length).toCharArray()) {
             text.add(String.valueOf(c));
@@ -71,5 +68,12 @@ public class NTService {
         if (latency > 0) {
             Thread.sleep(latency);
         }
+    }
+
+    private void sendToSSE(SseEmitter sseEmitter, Object object) throws IOException {
+        SseEmitter.SseEventBuilder event = SseEmitter.event()
+                .data(String.valueOf(object));
+        sseEmitter.send(event);
+        log.info("SSE -> {}", object);
     }
 }

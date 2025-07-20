@@ -38,11 +38,10 @@ public class NTController {
     @GetMapping(value = "/stream2", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<String> stream2(
             @RequestParam(name = "length", defaultValue = "100", required = false) int length,
-            @RequestParam(name = "latency", defaultValue = "100", required = false) int latency,
-            @RequestParam(name = "timeout", defaultValue = "10000", required = false) long timeout
+            @RequestParam(name = "latency", defaultValue = "100", required = false) int latency
     ) {
         log.info("Request /stream2");
-        return service.stream2(length, latency, timeout);
+        return service.stream2(length, latency);
     }
 
 }

@@ -1,0 +1,24 @@
+
+server:
+  port: 8083
+
+spring:
+  application:
+    name: app-nt-webflux
+
+integration:
+  mock:
+    url: http://localhost:8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "prometheus"
+  endpoint:
+    prometheus:
+      access: read_only
+  prometheus:
+    metrics:
+      export:
+        enabled: true

@@ -31,3 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
+/app-nt-mock/src/main/resources/application-gigachat.yml
