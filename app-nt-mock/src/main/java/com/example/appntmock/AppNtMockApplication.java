@@ -16,14 +16,4 @@ public class AppNtMockApplication {
 		SpringApplication.run(AppNtMockApplication.class, args);
 	}
 
-	@Bean
-	public AsyncTaskExecutor applicationTaskExecutor() {
-		return new TaskExecutorAdapter(Executors.newVirtualThreadPerTaskExecutor());
-	}
-
-	@Bean
-	public TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreadExecutorCustomizer() {
-		return protocolHandler -> protocolHandler.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
-	}
-
 }

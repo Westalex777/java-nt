@@ -19,8 +19,8 @@ public class GigaChatService {
                 .retrieve()
                 .bodyToFlux(String.class)
                 .doOnNext(msg -> System.out.println("Получено сообщение: " + msg))
-                .take(1)
-                .doOnComplete(() -> System.out.println("Завершено после 20 сообщений"));
+//                .take(1)
+                .doOnComplete(() -> System.out.println("Стрим завершен"));
     }
 
 }
