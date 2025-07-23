@@ -12,6 +12,10 @@ spring:
 integration:
   mock:
     url: http://mock:8080
+    grpc:
+      topic: news
+      host: mock
+      port: 6565
 
 management:
   endpoints:

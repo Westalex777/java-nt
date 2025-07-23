@@ -18,7 +18,7 @@ public class NTService {
     private static final String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private final Random random = new Random();
 
-    public String test(int latency) {
+    public String test(Long latency) {
         try {
             Thread.sleep(latency);
         } catch (InterruptedException e) {
@@ -27,7 +27,7 @@ public class NTService {
         return textGenerator(100);
     }
 
-    public SseEmitter stream(int length, int latency, long timeout) {
+    public SseEmitter stream(Integer length, Long latency, Long timeout) {
         SseEmitter sseEmitter = new SseEmitter(timeout);
         Thread.startVirtualThread(() -> {
             try {
@@ -44,18 +44,19 @@ public class NTService {
         return sseEmitter;
     }
 
-    public Flux<String> stream2(int length, int latency) {
+    public Flux<String> stream2(Integer length, Long latency) {
         List<String> text = new ArrayList<>();
         for (char c : textGenerator(length).toCharArray()) {
             text.add(String.valueOf(c));
         }
-        return Flux.fromIterable(text)
-                .doOnNext(log::info)
-                .delayElements(Duration.ofMillis(latency))
-                .take(Duration.ofSeconds(1));
+        if (latency > 0) {
+            return Flux.fromIterable(text)
+                    .delayElements(Duration.ofMillis(latency));
+        }
+        return Flux.fromIterable(text);
     }
 
-    private String textGenerator(int length) {
+    private String textGenerator(Integer length) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {
             int index = random.nextInt(chars.length());
@@ -64,7 +65,7 @@ public class NTService {
         return sb.toString();
     }
 
-    private void sleep(long latency) throws InterruptedException {
+    private void sleep(Long latency) throws InterruptedException {
         if (latency > 0) {
             Thread.sleep(latency);
         }

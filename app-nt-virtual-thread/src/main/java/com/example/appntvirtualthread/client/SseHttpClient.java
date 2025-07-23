@@ -17,7 +17,7 @@ public class SseHttpClient {
     @Value("${integration.mock.url}")
     private String mapping;
 
-    public String readSseStream(Integer length, Integer latency, Long timeout) {
+    public String readSseStream(Integer length, Long latency, Long timeout) {
         StringBuilder result = new StringBuilder();
         try {
             HttpURLConnection connection = getHttpConnection(length, latency, timeout);
@@ -37,7 +37,7 @@ public class SseHttpClient {
     }
 
     @SuppressWarnings("deprecation")
-    private HttpURLConnection getHttpConnection(Integer length, Integer latency, Long timeout) throws IOException {
+    private HttpURLConnection getHttpConnection(Integer length, Long latency, Long timeout) throws IOException {
         String mapping = this.mapping + "/stream" + addQueryParam(getParams(length, latency, timeout));
         URL url = new URL(mapping);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -45,7 +45,7 @@ public class SseHttpClient {
         return connection;
     }
 
-    private Map<String, String> getParams(Integer length, Integer latency, Long timeout) {
+    private Map<String, String> getParams(Integer length, Long latency, Long timeout) {
         Map<String, String> params = new HashMap<>();
         params.put("length", String.valueOf(length));
         params.put("latency", String.valueOf(latency));

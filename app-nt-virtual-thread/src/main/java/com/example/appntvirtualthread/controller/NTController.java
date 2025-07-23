@@ -17,23 +17,25 @@ public class NTController {
 
     @GetMapping("/test")
     public String test(@RequestParam(name = "httpClient", required = false, defaultValue = "httpClientImpl") String httpClient) {
-        log.info("Request /test");
         return service.test(httpClient);
     }
 
     @GetMapping("/mock")
-    public String test(@RequestParam(name = "latency", defaultValue = "1000", required = false) int latency) {
-        log.info("Request /mock");
+    public String test(@RequestParam(name = "latency", required = false) Long latency) {
         return service.test(latency);
     }
 
     @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public String stream(
             @RequestParam(name = "length", required = false) Integer length,
-            @RequestParam(name = "latency", required = false) Integer latency,
+            @RequestParam(name = "latency", required = false) Long latency,
             @RequestParam(name = "timeout", required = false) Long timeout
     ) {
-        log.info("Request /stream");
         return service.stream(length, latency, timeout);
+    }
+
+    @GetMapping("/grpc/stream")
+    public void grpcStream() {
+        service.grpcStream();
     }
 }

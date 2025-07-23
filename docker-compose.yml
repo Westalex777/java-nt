@@ -7,6 +7,7 @@ services:
       context: ./app-nt-mock
     ports:
       - "8080:8080"
+      - "6565:6565"
     networks:
       - nt-network
     deploy:

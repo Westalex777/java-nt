@@ -20,25 +20,25 @@ public class NTController {
     private final NTService service;
 
     @GetMapping("/mock")
-    public String test(@RequestParam(name = "latency", defaultValue = "1000", required = false) int latency) {
+    public String test(@RequestParam(name = "latency", defaultValue = "1000", required = false) Long latency) {
         log.info("Request /mock");
         return service.test(latency);
     }
 
     @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter stream(
-            @RequestParam(name = "length", defaultValue = "100", required = false) int length,
-            @RequestParam(name = "latency", defaultValue = "100", required = false) int latency,
-            @RequestParam(name = "timeout", defaultValue = "10000", required = false) long timeout
+            @RequestParam(name = "length", defaultValue = "1000", required = false) Integer length,
+            @RequestParam(name = "latency", defaultValue = "0", required = false) Long latency,
+            @RequestParam(name = "timeout", defaultValue = "100000", required = false) Long timeout
     ) {
-        log.info("Request /stream");
+        log.info("Request /stream ? length={}, latency={}, timeout={}", length, latency, timeout);
         return service.stream(length, latency, timeout);
     }
 
     @GetMapping(value = "/stream2", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<String> stream2(
-            @RequestParam(name = "length", defaultValue = "100", required = false) int length,
-            @RequestParam(name = "latency", defaultValue = "100", required = false) int latency
+            @RequestParam(name = "length", defaultValue = "1000", required = false) Integer length,
+            @RequestParam(name = "latency", defaultValue = "0", required = false) Long latency
     ) {
         log.info("Request /stream2");
         return service.stream2(length, latency);

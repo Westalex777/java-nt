@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "com.example.appntvirtualthread.service";
+option java_multiple_files = true;
+
+service TextStreamer {
+  rpc StreamText(TextRequest) returns (stream TextResponse);
+}
+
+message TextRequest {
+  string topic = 1;
+}
+
+message TextResponse {
+  string message = 1;
+}
