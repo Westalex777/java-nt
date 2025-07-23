@@ -60,6 +60,21 @@ services:
           cpus: '1'
           memory: 512M
 
+  golang-service:
+    build:
+      context: ./app-nt-golang
+    ports:
+      - "8084:8084"
+    depends_on:
+      - mock
+    networks:
+      - nt-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+
   prometheus:
     image: prom/prometheus
     volumes:
